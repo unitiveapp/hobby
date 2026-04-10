@@ -40,10 +40,16 @@ jobs:
       - name: Add SPA 404 fallback
         run: cp dist/index.html dist/404.html
 
+      - name: Disable Jekyll (required for _expo/ asset paths)
+        # GitHub Pages runs Jekyll by default, which silently drops any
+        # directory whose name starts with '_' — including Expo's _expo/
+        # folder that contains the JS bundle.  An empty .nojekyll file
+        # at the site root disables Jekyll and serves all files as-is.
+        run: touch dist/.nojekyll
+
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          # Keep the CNAME file if a custom domain is ever added
           keep_files: false
