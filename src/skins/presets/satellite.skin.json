@@ -1,0 +1,31 @@
+{
+  "id": "satellite",
+  "name": "Satellite",
+  "description": "Satellite imagery with street labels overlay",
+  "extends": "light",
+  "tokens": {
+    "labels": {
+      "primary": "#ffffff",
+      "secondary": "#dddddd",
+      "halo": "#000000",
+      "haloWidth": 2
+    },
+    "globalOpacity": 1
+  },
+  "layerOverrides": [],
+  "adapterHints": {
+    "mapbox": {
+      "styleUrl": "mapbox://styles/mapbox/satellite-streets-v12"
+    },
+    "leaflet": {
+      "tileUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      "attribution": "Tiles © Esri"
+    },
+    "google": {
+      "mapTypeId": "satellite"
+    }
+  },
+  "meta": {
+    "tags": ["satellite", "aerial", "imagery"]
+  }
+}

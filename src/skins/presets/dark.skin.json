@@ -1,0 +1,56 @@
+{
+  "id": "dark",
+  "name": "Dark",
+  "description": "Dark mode map with vibrant accent colors",
+  "extends": "light",
+  "tokens": {
+    "background": "#1a1a2e",
+    "water": "#1e3a5f",
+    "waterway": "#16324f",
+    "landuse": "#16213e",
+    "park": "#1a3a2a",
+    "roads": {
+      "highway": "#c0392b",
+      "arterial": "#d4ac0d",
+      "local": "#2c2c3e",
+      "path": "#22223b"
+    },
+    "labels": {
+      "primary": "#e0e0e0",
+      "secondary": "#a0a0b0",
+      "halo": "#1a1a2e",
+      "haloWidth": 1
+    },
+    "buildings": {
+      "fill": "#22223b",
+      "outline": "#2c2c4a",
+      "extrusion": "#2a2a42"
+    },
+    "borders": "#444466",
+    "poi": "#e74c3c",
+    "globalOpacity": 1
+  },
+  "layerOverrides": [],
+  "adapterHints": {
+    "mapbox": {
+      "styleUrl": "mapbox://styles/mapbox/dark-v11"
+    },
+    "leaflet": {
+      "tileUrl": "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      "attribution": "© OpenStreetMap contributors © CARTO"
+    },
+    "google": {
+      "mapTypeId": "roadmap",
+      "styles": [
+        { "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
+        { "elementType": "labels.text.stroke", "stylers": [{ "color": "#212121" }] },
+        { "elementType": "labels.text.fill", "stylers": [{ "color": "#757575" }] },
+        { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#000000" }] },
+        { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#38414e" }] }
+      ]
+    }
+  },
+  "meta": {
+    "tags": ["dark", "night"]
+  }
+}

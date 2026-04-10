@@ -1,0 +1,51 @@
+{
+  "id": "light",
+  "name": "Light",
+  "description": "Clean, bright map with high contrast labels",
+  "tokens": {
+    "background": "#f8f4f0",
+    "water": "#a8d5f5",
+    "waterway": "#74b9e0",
+    "landuse": "#eee8d5",
+    "park": "#d4edda",
+    "roads": {
+      "highway": "#f4a261",
+      "arterial": "#e9c46a",
+      "local": "#ffffff",
+      "path": "#e0d7ce"
+    },
+    "labels": {
+      "primary": "#1a1a2e",
+      "secondary": "#555555",
+      "halo": "#ffffff",
+      "haloWidth": 1.5
+    },
+    "buildings": {
+      "fill": "#ede8e0",
+      "outline": "#ccc4ba",
+      "extrusion": "#d8d0c8"
+    },
+    "borders": "#aaaaaa",
+    "poi": "#e74c3c",
+    "fontStack": ["Open Sans Regular", "Arial Unicode MS Regular"],
+    "labelMinZoom": 10,
+    "buildingMinZoom": 15,
+    "globalOpacity": 1
+  },
+  "layerOverrides": [],
+  "adapterHints": {
+    "mapbox": {
+      "styleUrl": "mapbox://styles/mapbox/light-v11"
+    },
+    "leaflet": {
+      "tileUrl": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": "© OpenStreetMap contributors"
+    },
+    "google": {
+      "mapTypeId": "roadmap"
+    }
+  },
+  "meta": {
+    "tags": ["light", "minimal", "default"]
+  }
+}
