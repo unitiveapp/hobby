@@ -5,24 +5,19 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
-# Grant the GITHUB_TOKEN the permissions needed to deploy Pages
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Only one deployment runs at a time; cancel queued ones if a newer push arrives
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
-  # Use Node.js 24 runtime for GitHub Actions (avoids Node 20 deprecation warnings)
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build:
-    name: Build web export
+  deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,39 +31,19 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Configure GitHub Pages base path
-        uses: actions/configure-pages@v4
-        with:
-          # Automatically enables Pages on the repository if not already active
-          enablement: true
-
       - name: Build Expo web export
         run: npx expo export --platform web
         env:
-          # No Mapbox token → app defaults to Leaflet / OpenStreetMap (free)
           EXPO_PUBLIC_MAPBOX_TOKEN: ""
-          # Tells app.config.ts to skip the @rnmapbox/maps native config plugin
-          # (it only configures iOS/Android builds, not web)
           EXPO_PLATFORM: web
 
       - name: Add SPA 404 fallback
-        # GitHub Pages returns a 404 for unknown paths; this redirects back
-        # to index.html so Expo Router can handle client-side navigation.
         run: cp dist/index.html dist/404.html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist/
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # Keep the CNAME file if a custom domain is ever added
+          keep_files: false
