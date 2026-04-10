@@ -7,6 +7,8 @@ export function MapControls() {
   const adapter = useMapAdapter();
   const { viewport, setViewport } = useMapStore();
 
+  if (!adapter) return null; // adapter not yet initialised
+
   const zoomIn = () => {
     const current = adapter.getViewport();
     adapter.setViewport({ zoom: (current.zoom ?? 2) + 1 });

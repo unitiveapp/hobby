@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, type ReactNode } from 'react';
+import React, { useEffect, useRef, useState, type ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { MapAdapterContext } from './MapAdapterContext';
 import { useMapStore } from '../../store/mapStore';
@@ -41,6 +41,9 @@ function translateSkin(adapterId: AdapterId, skin: ResolvedSkin) {
 export function MapContainer({ children, style }: Props) {
   const containerRef = useRef<View>(null);
   const adapterRef = useRef<MapAdapter | null>(null);
+  // liveAdapter is the state-backed copy of adapterRef — updating it triggers
+  // a re-render so the context value propagates to children.
+  const [liveAdapter, setLiveAdapter] = useState<MapAdapter | null>(null);
 
   const { activeAdapterId, viewport, setReady, setAdapter } = useMapStore();
   const resolvedSkin = useSkin();
@@ -60,6 +63,7 @@ export function MapContainer({ children, style }: Props) {
 
     const adapter = createAdapter(activeAdapterId);
     adapterRef.current = adapter;
+    setLiveAdapter(null); // reset context while new adapter initialises
     setReady(false);
 
     const token =
@@ -72,6 +76,7 @@ export function MapContainer({ children, style }: Props) {
       accessToken: token || undefined,
     }).then(() => {
       setReady(true);
+      setLiveAdapter(adapter); // expose adapter to context consumers
       // Apply current skin immediately after init
       const skin = useSkinStore.getState().resolvedSkin;
       if (skin) {
@@ -81,6 +86,7 @@ export function MapContainer({ children, style }: Props) {
 
     return () => {
       adapter.destroy();
+      setLiveAdapter(null);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeAdapterId]);
@@ -93,7 +99,7 @@ export function MapContainer({ children, style }: Props) {
   }, [resolvedSkin, activeAdapterId]);
 
   return (
-    <MapAdapterContext.Provider value={adapterRef.current}>
+    <MapAdapterContext.Provider value={liveAdapter}>
       <View ref={containerRef} style={[styles.container, style]}>
         {children}
       </View>

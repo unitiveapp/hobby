@@ -16,6 +16,7 @@ export function useSelection(): {
   const adapter = useMapAdapter();
 
   useEffect(() => {
+    if (!adapter) return; // wait until adapter is ready
     selectionManager.attach(adapter);
     return () => selectionManager.detach();
   }, [adapter]);
