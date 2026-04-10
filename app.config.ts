@@ -34,10 +34,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
     favicon: './assets/favicon.png',
   },
-  // GitHub Pages serves the app at /hobby — this tells Expo Router
-  // to prefix all routes and asset URLs with that path.
+  // GitHub Pages serves the app at /hobby — prefix all routes and asset URLs.
+  // Expo SDK 51 uses `experiments.baseUrl`; the old `basePath` field is a no-op.
   experiments: {
-    basePath: '/hobby',
+    baseUrl: '/hobby',
   },
   plugins: [
     'expo-router',
