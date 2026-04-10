@@ -75,8 +75,10 @@ export function MapContainer({ children, style }: Props) {
       viewport,
       accessToken: token || undefined,
     }).then(() => {
+      // Set liveAdapter BEFORE setReady so context consumers already have the
+      // adapter instance when isReady triggers their re-render.
+      setLiveAdapter(adapter);
       setReady(true);
-      setLiveAdapter(adapter); // expose adapter to context consumers
       // Apply current skin immediately after init
       const skin = useSkinStore.getState().resolvedSkin;
       if (skin) {

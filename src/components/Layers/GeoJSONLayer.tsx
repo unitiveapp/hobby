@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useMapAdapter } from '../../hooks/useMapAdapter';
 import { useDataStore } from '../../store/dataStore';
-import { useMapStore } from '../../store/mapStore';
 import type { LayerSpec } from '../../adapters/base/MapAdapter';
 
 interface Props {
@@ -20,18 +19,15 @@ const DEFAULT_PAINT = {
 
 export function GeoJSONLayer({ id, sourceId = `${id}-source`, layerSpec, visible = true }: Props) {
   const adapter = useMapAdapter();
-  const isReady = useMapStore((s) => s.isReady);
   const mergedCollection = useDataStore((s) => s.mergedCollection);
 
+  // Register source + layer once the adapter is ready
   useEffect(() => {
-    if (!isReady) return;
+    if (!adapter) return;
 
-    // Register source
     if (!adapter.hasSource(sourceId)) {
       adapter.addSource(sourceId, { type: 'geojson', data: mergedCollection });
     }
-
-    // Register layer
     if (!adapter.hasLayer(id)) {
       adapter.addLayer({
         id,
@@ -48,19 +44,19 @@ export function GeoJSONLayer({ id, sourceId = `${id}-source`, layerSpec, visible
       if (adapter.hasSource(sourceId)) adapter.removeSource(sourceId);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
+  }, [adapter]);
 
   // Sync data updates
   useEffect(() => {
-    if (!isReady) return;
+    if (!adapter) return;
     adapter.updateSourceData(sourceId, mergedCollection);
-  }, [mergedCollection, sourceId, adapter, isReady]);
+  }, [adapter, mergedCollection, sourceId]);
 
   // Sync visibility
   useEffect(() => {
-    if (!isReady) return;
+    if (!adapter) return;
     adapter.setLayerVisibility(id, visible);
-  }, [visible, id, adapter, isReady]);
+  }, [adapter, visible, id]);
 
   return null;
 }
