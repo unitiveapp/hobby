@@ -4,7 +4,7 @@ import { MapAdapterContext } from './MapAdapterContext';
 import { useMapStore } from '../../store/mapStore';
 import { useSkinStore } from '../../store/skinStore';
 import { useSkin } from '../../hooks/useSkin';
-import { createAdapter, resolveDefaultAdapter } from '../../adapters/index';
+import { createAdapter } from '../../adapters/index';
 import { mapboxSkinTranslator } from '../../skins/translators/mapboxSkinTranslator';
 import { leafletSkinTranslator } from '../../skins/translators/leafletSkinTranslator';
 import { googleSkinTranslator } from '../../skins/translators/googleSkinTranslator';
@@ -45,14 +45,12 @@ export function MapContainer({ children, style }: Props) {
   // a re-render so the context value propagates to children.
   const [liveAdapter, setLiveAdapter] = useState<MapAdapter | null>(null);
 
-  const { activeAdapterId, viewport, setReady, setAdapter } = useMapStore();
+  const { activeAdapterId, viewport, setReady } = useMapStore();
   const resolvedSkin = useSkin();
 
-  // Boot: pick default adapter if not set
-  useEffect(() => {
-    const defaultId = resolveDefaultAdapter();
-    if (!activeAdapterId) setAdapter(defaultId);
-  }, []);
+  // No boot effect needed — mapStore initialises activeAdapterId at module load
+  // time via resolveInitialAdapter(), so the correct adapter is set before
+  // any component mounts.
 
   // (Re-)create adapter when activeAdapterId changes
   useEffect(() => {

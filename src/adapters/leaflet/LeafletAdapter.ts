@@ -2,6 +2,9 @@
  * LeafletAdapter wraps Leaflet for web.
  * Used as a fallback when no Mapbox token is available.
  */
+// Leaflet's CSS is required for tiles to be positioned correctly.
+// Metro's web bundler handles this import; on native this file is never loaded.
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { MapAdapter, MapInitOptions, LayerSpec, SourceSpec } from '../base/MapAdapter';
 import type { BBox, EdgeInsets, ScreenPoint, Viewport } from '../../types/geo';
