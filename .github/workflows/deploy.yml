@@ -16,6 +16,10 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+env:
+  # Use Node.js 24 runtime for GitHub Actions (avoids Node 20 deprecation warnings)
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     name: Build web export
@@ -34,6 +38,9 @@ jobs:
 
       - name: Configure GitHub Pages base path
         uses: actions/configure-pages@v4
+        with:
+          # Automatically enables Pages on the repository if not already active
+          enablement: true
 
       - name: Build Expo web export
         run: npx expo export --platform web
