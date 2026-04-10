@@ -29,6 +29,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
     favicon: './assets/favicon.png',
   },
+  // GitHub Pages serves the app at /hobby — this tells Expo Router
+  // to prefix all routes and asset URLs with that path.
+  experiments: {
+    basePath: '/hobby',
+  },
   plugins: [
     'expo-router',
     'react-native-reanimated/plugin',
