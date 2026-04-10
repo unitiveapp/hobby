@@ -40,6 +40,9 @@ jobs:
         env:
           # No Mapbox token → app defaults to Leaflet / OpenStreetMap (free)
           EXPO_PUBLIC_MAPBOX_TOKEN: ""
+          # Tells app.config.ts to skip the @rnmapbox/maps native config plugin
+          # (it only configures iOS/Android builds, not web)
+          EXPO_PLATFORM: web
 
       - name: Add SPA 404 fallback
         # GitHub Pages returns a 404 for unknown paths; this redirects back

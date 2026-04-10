@@ -46,6 +46,8 @@ jobs:
         env:
           # No Mapbox token — defaults to Leaflet/OpenStreetMap
           EXPO_PUBLIC_MAPBOX_TOKEN: ""
+          # Skip the @rnmapbox/maps native config plugin for web builds
+          EXPO_PLATFORM: web
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

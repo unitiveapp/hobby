@@ -12,6 +12,11 @@ const webStubs = {
   // so the import never actually reaches the native module on web.
   // As a safety net, also alias the package itself.
   '@rnmapbox/maps': path.resolve(__dirname, 'src/stubs/rnmapbox-stub.js'),
+
+  // mapbox-gl uses dynamic import() expressions that Metro cannot process.
+  // When EXPO_PUBLIC_MAPBOX_TOKEN is not set the LeafletAdapter is used and
+  // mapbox-gl is never instantiated — the stub satisfies the module graph.
+  'mapbox-gl': path.resolve(__dirname, 'src/stubs/mapbox-gl-stub.js'),
 };
 
 config.resolver = {

@@ -1,5 +1,10 @@
 import { ExpoConfig, ConfigContext } from 'expo/config';
 
+// The @rnmapbox/maps config plugin only configures native (iOS/Android) build
+// settings. It must be excluded for web builds because the plugin resolver
+// requires a native project root that doesn't exist in web-only export mode.
+const isWebBuild = process.env.EXPO_PLATFORM === 'web';
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Hobby Map',
@@ -36,13 +41,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
-    'react-native-reanimated/plugin',
-    [
-      '@rnmapbox/maps',
-      {
-        RNMapboxMapsDownloadToken: process.env.MAPBOX_DOWNLOAD_TOKEN ?? '',
-      },
-    ],
+    // Native-only config plugins — skipped for web export because they only
+    // configure iOS/Android build settings and fail in web-only export mode.
+    ...(!isWebBuild
+      ? [
+          'react-native-reanimated/plugin' as const,
+          [
+            '@rnmapbox/maps' as const,
+            {
+              RNMapboxMapsDownloadToken: process.env.MAPBOX_DOWNLOAD_TOKEN ?? '',
+            },
+          ] as const,
+        ]
+      : []),
   ],
   scheme: 'hobbymap',
   extra: {
