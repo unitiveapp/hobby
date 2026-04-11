@@ -100,16 +100,32 @@ export function MapContainer({ children, style }: Props) {
 
   return (
     <MapAdapterContext.Provider value={liveAdapter}>
-      <View ref={containerRef} style={[styles.container, style]}>
-        {children}
+      {/*
+       * Two-layer structure:
+       *  1. mapArea  — the bare div that Leaflet/Mapbox attaches to.
+       *               No React children here; Leaflet owns this DOM subtree.
+       *  2. overlay  — absolutely-positioned layer rendered ON TOP of the map
+       *               (z-index > Leaflet's 1000 control layer).
+       *               pointerEvents="box-none" keeps the layer transparent to
+       *               pan/zoom events while still letting buttons inside it fire.
+       */}
+      <View style={[styles.wrapper, style]}>
+        <View ref={containerRef} style={StyleSheet.absoluteFillObject} />
+        <View style={styles.overlay} pointerEvents="box-none">
+          {children}
+        </View>
       </View>
     </MapAdapterContext.Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
     overflow: 'hidden',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1001, // above Leaflet's control container (z-index: 1000)
   },
 });

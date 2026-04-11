@@ -38,8 +38,8 @@
       "styleUrl": "mapbox://styles/mapbox/light-v11"
     },
     "leaflet": {
-      "tileUrl": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      "attribution": "© OpenStreetMap contributors"
+      "tileUrl": "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      "attribution": "© OpenStreetMap contributors © CARTO"
     },
     "google": {
       "mapTypeId": "roadmap"
