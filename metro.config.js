@@ -14,9 +14,16 @@ const webStubs = {
   '@rnmapbox/maps': path.resolve(__dirname, 'src/stubs/rnmapbox-stub.js'),
 
   // mapbox-gl uses dynamic import() expressions that Metro cannot process.
-  // When EXPO_PUBLIC_MAPBOX_TOKEN is not set the LeafletAdapter is used and
-  // mapbox-gl is never instantiated — the stub satisfies the module graph.
   'mapbox-gl': path.resolve(__dirname, 'src/stubs/mapbox-gl-stub.js'),
+};
+
+// On native platforms stub out web-only GL libraries so the module graph
+// still resolves even though these adapters are never instantiated.
+const nativeStubs = {
+  'maplibre-gl': path.resolve(__dirname, 'src/stubs/maplibre-gl-stub.js'),
+  'maplibre-gl/dist/maplibre-gl.css': path.resolve(__dirname, 'src/stubs/empty.js'),
+  'leaflet': path.resolve(__dirname, 'src/stubs/leaflet-stub.js'),
+  'leaflet/dist/leaflet.css': path.resolve(__dirname, 'src/stubs/empty.js'),
 };
 
 config.resolver = {
@@ -29,10 +36,10 @@ config.resolver = {
   // Web-specific package aliases
   resolveRequest: (context, moduleName, platform) => {
     if (platform === 'web' && webStubs[moduleName]) {
-      return {
-        filePath: webStubs[moduleName],
-        type: 'sourceFile',
-      };
+      return { filePath: webStubs[moduleName], type: 'sourceFile' };
+    }
+    if (platform !== 'web' && nativeStubs[moduleName]) {
+      return { filePath: nativeStubs[moduleName], type: 'sourceFile' };
     }
     return context.resolveRequest(context, moduleName, platform);
   },

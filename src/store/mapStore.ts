@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { Platform } from 'react-native';
 import type { Viewport } from '../types/geo';
 
-export type AdapterId = 'mapbox-web' | 'mapbox-native' | 'leaflet' | 'google';
+export type AdapterId = 'mapbox-web' | 'mapbox-native' | 'maplibre-web' | 'leaflet' | 'google';
 export type MapType = 'geographic' | 'custom-tile' | 'image';
 
 interface MapState {
@@ -31,7 +31,7 @@ function resolveInitialAdapter(): AdapterId {
     typeof process !== 'undefined'
       ? (process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '')
       : '';
-  return token ? 'mapbox-web' : 'leaflet';
+  return token ? 'mapbox-web' : 'maplibre-web';
 }
 
 export const useMapStore = create<MapState>((set) => ({

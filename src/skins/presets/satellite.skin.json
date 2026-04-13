@@ -17,6 +17,9 @@
     "mapbox": {
       "styleUrl": "mapbox://styles/mapbox/satellite-streets-v12"
     },
+    "maplibre": {
+      "styleUrl": "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+    },
     "leaflet": {
       "tileUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       "attribution": "Tiles © Esri"

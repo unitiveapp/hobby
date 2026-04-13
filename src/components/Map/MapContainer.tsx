@@ -6,6 +6,7 @@ import { useSkinStore } from '../../store/skinStore';
 import { useSkin } from '../../hooks/useSkin';
 import { createAdapter } from '../../adapters/index';
 import { mapboxSkinTranslator } from '../../skins/translators/mapboxSkinTranslator';
+import { maplibreSkinTranslator } from '../../skins/translators/maplibreSkinTranslator';
 import { leafletSkinTranslator } from '../../skins/translators/leafletSkinTranslator';
 import { googleSkinTranslator } from '../../skins/translators/googleSkinTranslator';
 import type { MapAdapter } from '../../adapters/base/MapAdapter';
@@ -21,20 +22,13 @@ function translateSkin(adapterId: AdapterId, skin: ResolvedSkin) {
   switch (adapterId) {
     case 'mapbox-web':
     case 'mapbox-native':
-      return {
-        resolvedSkin: skin,
-        payload: mapboxSkinTranslator.translate(skin),
-      };
+      return { resolvedSkin: skin, payload: mapboxSkinTranslator.translate(skin) };
+    case 'maplibre-web':
+      return { resolvedSkin: skin, payload: maplibreSkinTranslator.translate(skin) };
     case 'leaflet':
-      return {
-        resolvedSkin: skin,
-        payload: leafletSkinTranslator.translate(skin),
-      };
+      return { resolvedSkin: skin, payload: leafletSkinTranslator.translate(skin) };
     case 'google':
-      return {
-        resolvedSkin: skin,
-        payload: googleSkinTranslator.translate(skin),
-      };
+      return { resolvedSkin: skin, payload: googleSkinTranslator.translate(skin) };
   }
 }
 

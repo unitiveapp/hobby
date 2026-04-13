@@ -35,6 +35,9 @@
     "mapbox": {
       "styleUrl": "mapbox://styles/mapbox/dark-v11"
     },
+    "maplibre": {
+      "styleUrl": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+    },
     "leaflet": {
       "tileUrl": "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       "attribution": "© OpenStreetMap contributors © CARTO"
