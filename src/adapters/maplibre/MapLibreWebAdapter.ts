@@ -51,6 +51,8 @@ export class MapLibreWebAdapter implements MapAdapter {
   private map: MapLibreMap | null = null;
   private ready = false;
   private pointerHandlers: Array<(e: NormalizedPointerEvent) => void> = [];
+  /** Tracks the style URL currently loaded so we don't re-trigger a reload for the same style. */
+  private currentStyleUrl = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
   async initialize(container: HTMLElement, options: MapInitOptions): Promise<void> {
     this.map = new maplibregl.Map({
@@ -79,6 +81,7 @@ export class MapLibreWebAdapter implements MapAdapter {
     this.map?.remove();
     this.map = null;
     this.ready = false;
+    this.currentStyleUrl = '';
     this.pointerHandlers = [];
   }
 
@@ -143,10 +146,18 @@ export class MapLibreWebAdapter implements MapAdapter {
 
     if (payload.styleSpec) {
       this.map.setStyle(payload.styleSpec);
+      this.currentStyleUrl = '';
       if (payload.updates?.length) {
         this.map.once('style.load', () => this.applyUpdates(payload.updates ?? []));
       }
     } else if (payload.styleUrl) {
+      if (payload.styleUrl === this.currentStyleUrl) {
+        // Same style already loaded — skip redundant reload and apply any
+        // fine-grained updates immediately (style is already loaded).
+        if (payload.updates?.length) this.applyUpdates(payload.updates);
+        return;
+      }
+      this.currentStyleUrl = payload.styleUrl;
       this.map.setStyle(payload.styleUrl);
       if (payload.updates?.length) {
         this.map.once('style.load', () => this.applyUpdates(payload.updates ?? []));
