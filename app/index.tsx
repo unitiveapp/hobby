@@ -9,13 +9,16 @@ import { SkinPicker } from '../src/components/SkinEditor/SkinPicker';
 import { TokenEditor } from '../src/components/SkinEditor/TokenEditor';
 import { DataSourceList } from '../src/components/DataPanel/DataSourceList';
 import { GeoJSONLayer } from '../src/components/Layers/GeoJSONLayer';
+import { DrawingOverlay } from '../src/components/Selection/DrawingOverlay';
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <MapContainer style={styles.map}>
-        {/* Every child guards itself against null adapter — no isReady gate needed */}
+        {/* Data + drawing layers — these render into the map canvas, return null */}
         <GeoJSONLayer id="merged-data" visible />
+        <DrawingOverlay />
+        {/* UI overlays — rendered above the map in the overlay layer */}
         <SelectionToolbar />
         <SkinPicker />
         <MapControls />

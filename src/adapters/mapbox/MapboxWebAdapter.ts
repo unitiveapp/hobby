@@ -87,6 +87,19 @@ export class MapboxWebAdapter implements MapAdapter {
     });
   }
 
+  setInteractive(interactive: boolean): void {
+    if (!this.map) return;
+    if (interactive) {
+      this.map.dragPan.enable();
+      this.map.dragRotate.enable();
+      this.map.getCanvas().style.cursor = '';
+    } else {
+      this.map.dragPan.disable();
+      this.map.dragRotate.disable();
+      this.map.getCanvas().style.cursor = 'crosshair';
+    }
+  }
+
   fitBounds(bbox: BBox, padding?: EdgeInsets, animate = true): void {
     if (!this.map) return;
     this.map.fitBounds([bbox[0], bbox[1], bbox[2], bbox[3]], {

@@ -98,6 +98,8 @@ export class GoogleMapsAdapter implements MapAdapter {
     }
   }
 
+  setInteractive(_interactive: boolean): void { /* Google Maps handles this separately */ }
+
   fitBounds(bbox: BBox): void {
     if (!this.mapInstance) return;
     this.mapInstance.fitBounds({

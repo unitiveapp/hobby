@@ -88,6 +88,17 @@ export class LeafletAdapter implements MapAdapter {
     }
   }
 
+  setInteractive(interactive: boolean): void {
+    if (!this.map) return;
+    if (interactive) {
+      this.map.dragging.enable();
+      if (this.container) this.container.style.cursor = '';
+    } else {
+      this.map.dragging.disable();
+      if (this.container) this.container.style.cursor = 'crosshair';
+    }
+  }
+
   fitBounds(bbox: BBox, padding?: EdgeInsets): void {
     if (!this.map) return;
     this.map.fitBounds(

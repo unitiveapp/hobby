@@ -80,6 +80,10 @@ export interface MapAdapter {
   // ── Skin ─────────────────────────────────────────────────────────────────────
   applySkin(translated: TranslatedSkin): void;
 
+  // ── Interactivity ────────────────────────────────────────────────────────────
+  /** Disable/enable map drag-pan and rotate (used while a drawing tool is active). */
+  setInteractive(interactive: boolean): void;
+
   // ── Layers ───────────────────────────────────────────────────────────────────
   addLayer(layer: LayerSpec): void;
   removeLayer(layerId: string): void;

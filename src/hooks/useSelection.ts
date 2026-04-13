@@ -8,10 +8,11 @@ import type { SelectionEvent } from '../types/events';
 export function useSelection(): {
   activeTool: SelectionToolType | null;
   selections: SelectionEvent[];
+  isMultiSelectMode: boolean;
   setTool(tool: SelectionToolType | null): void;
   clearAll(): void;
   toggleMultiSelect(): void;
-  isMultiSelectMode: boolean;
+  finalizePolygon(): void;
 } {
   const adapter = useMapAdapter();
 
@@ -32,5 +33,8 @@ export function useSelection(): {
     setTool: (tool) => selectionManager.setActiveTool(tool),
     clearAll: () => useSelectionStore.getState().clearAll(),
     toggleMultiSelect: () => useSelectionStore.getState().toggleMultiSelect(),
+    finalizePolygon: () => void selectionManager.finalizePolygon(
+      useSelectionStore.getState().isMultiSelectMode
+    ),
   };
 }

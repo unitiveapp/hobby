@@ -25,6 +25,7 @@ export class SelectionManager {
   private activeTool: InstanceType<typeof FreehandTool> | InstanceType<typeof RectangleTool> | InstanceType<typeof PolygonTool> | InstanceType<typeof ClickSelectTool> | null = null;
   private listeners: Set<SelectionManagerListener> = new Set();
   private unsubPointer: (() => void) | null = null;
+  private adapter: MapAdapter | null = null;
 
   private tools = {
     freehand: new FreehandTool(),
@@ -36,18 +37,23 @@ export class SelectionManager {
   /** Attach to a map adapter to receive pointer events */
   attach(adapter: MapAdapter): void {
     this.unsubPointer?.();
+    this.adapter = adapter;
     this.unsubPointer = adapter.onPointer((event) => this.handlePointer(event));
   }
 
   detach(): void {
     this.unsubPointer?.();
     this.unsubPointer = null;
+    this.adapter?.setInteractive(true);
+    this.adapter = null;
   }
 
   setActiveTool(type: SelectionToolType | null): void {
     this.activeTool?.reset();
     this.activeTool = type ? this.tools[type] : null;
     this.setState('idle');
+    // Disable map drag-pan while a drawing tool is active so drawing wins
+    this.adapter?.setInteractive(type === null);
     useSelectionStore.getState().setActiveTool(type);
     useSelectionStore.getState().setDrawingPreview(null);
   }

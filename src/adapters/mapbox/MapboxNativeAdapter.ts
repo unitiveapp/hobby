@@ -92,6 +92,8 @@ export class MapboxNativeAdapter implements MapAdapter {
     }
   }
 
+  setInteractive(_interactive: boolean): void { /* native panning handled by Mapbox SDK gestures */ }
+
   fitBounds(bbox: BBox, padding?: EdgeInsets): void {
     if (!this.cameraRef) return;
     this.cameraRef.fitBounds(
